@@ -22,58 +22,36 @@
                 </div>
             </div>
             <div class="m-t-25">
-                <table id="data-table" class="table table-hover table-responsive-lg overflow-auto">
+                <table id="data-table2" class="table table-hover table-responsive-lg overflow-auto">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Foto</th>
+                            <!-- <th>Foto</th> -->
                             <th>Nama Produk</th>
                             <th>Kode Produk</th>
-                            <th>Jenis Produk</th>
+                            <!-- <th>Jenis Produk</th> -->
                             <th>Nomor</th>
                             <th>Tinggi</th>
                             <th>Unit</th>
                             <th>Harga</th>
+                            <!-- <th>Deskripsi</th> -->
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($data as $d)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td><img width="80px" src="{{ url('/images/'.$d->foto) }}"></td>
-                            <td>{{$d->nama_produk}}</td>
-                            <td>{{$d->kode_produk}}</td>
-                            <td>{{$d->jenis_produk}}</td>
-                            <td>{{$d->nomor}}</td>
-                            <td>{{$d->tinggi}}</td>
-                            <td>{{$d->unit}}</td>
-                            <td>{{$d->harga}}</td>
-                            <td>
-                                <a href="/produk/detail/{{$d->id_produk}}" class="btn btn-sm btn-icon btn-tone btn-info"
-                                    data-toggle="tooltip" data-placement="top" title="Detail"><i
-                                        class="anticon anticon-profile"></i></a>
-                                <a href="/produk/edit/{{$d->id_produk}}"
-                                    class="btn btn-sm btn-icon btn-tone btn-success" data-toggle="tooltip"
-                                    data-placement="top" title="Edit"><i class="anticon anticon-edit"></i></a>
-                                <button type="button" class="btn btn-sm btn-icon btn-tone btn-danger"
-                                    data-toggle="modal" data-target="#delete{{$d->id_produk}}"><i data-toggle="tooltip"
-                                        data-placement="top" title="Hapus" class="anticon anticon-delete"></i></button>
-                            </td>
-                        </tr>
-                        @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <th>No</th>
-                            <th>Foto</th>
+                            <!-- <th>Foto</th> -->
                             <th>Nama Produk</th>
                             <th>Kode Produk</th>
-                            <th>Jenis Produk</th>
+                            <!-- <th>Jenis Produk</th> -->
                             <th>Nomor</th>
                             <th>Tinggi</th>
                             <th>Unit</th>
                             <th>Harga</th>
+                            <!-- <th>Deskripsi</th> -->
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -121,7 +99,8 @@
             </div>
             <div class="modal-body">
                 <div class="m-t-20 container-fluid">
-                    <form action="">
+                    <form method="POST" action="{{ route('produk.store') }}" enctype="multipart/form-data">
+                        @csrf
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="brand">Nama
                                 Brand</label>
@@ -152,9 +131,9 @@
                                 <select class="select2  @error('jenis_produk') is-invalid @enderror" name="jenis_produk"
                                     id="jenis">
                                     <option value=""></option>
-                                    <option value="laki-laki">Polos</option>
-                                    <option value="perempuan">Bordir</option>
-                                    <option value="perempuan">Soga</option>
+                                    <option value="Polos">Polos</option>
+                                    <option value="Bordir">Bordir</option>
+                                    <option value="Soga">Soga</option>
                                 </select>
                                 @error('jenis_produk')
                                 <span class="invalid-feedback" role="alert">
@@ -235,24 +214,108 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="deskripsi">Deskripsi</label>
+                            <label class="col-sm-2 col-form-label control-label font-weight-semibold"
+                                for="deskripsi">Deskripsi</label>
                             <div class="col-md-10">
-                                <div id="editor">
-                                </div>
+                                <textarea class="form-control" name="deskripsi" id="editor" rows="30"></textarea>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
+            </form>
         </div>
     </div>
-</div>
 </div>
 <!--add data end -->
 
 @endforeach
+@endsection
+@section('js')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/getBrand",
+            dataType: 'json',
+            success: function (response) {
+                console.log(response.data);
+                var bodyData = '';
+                $.each(response.data, function (key, item) {
+                    document.getElementById('id_brand').value = item.id_brand;
+                    document.getElementById('nama_brand').value = item.nama_brand;
+                    bodyData += '<option value="' + item.id_brand + '">' + item.nama_brand +
+                        '</option>'
+                })
+                $("#bodyData").append(bodyData);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        var t = $('#data-table2').dataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('produk.index')}}",
+            columns: [
+                // {
+                //     data: null,
+                //     render: function (data, type, row, meta) {
+                //         return meta.row + meta.settings._iDisplayStart + 1;
+                //     }
+                // },
+                {
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    className: 'text-center'
+                },
+                {
+                    data: 'nama_produk',
+                    name: 'nama_produk',
+                    className: 'text-center'
+                },
+                {
+                    data: 'kode_produk',
+                    name: 'kode_produk',
+                    className: 'text-center'
+                },
+                {
+                    data: 'nomor',
+                    name: 'nomor',
+                    className: 'text-center'
+                },
+                {
+                    data: 'tinggi',
+                    name: 'tinggi',
+                    className: 'text-center'
+                },
+                {
+                    data: 'unit',
+                    name: 'unit',
+                    className: 'text-center'
+                },
+                {
+                    data: 'harga',
+                    name: 'harga',
+                    className: 'text-center'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    className: 'text-center'
+                },
+            ]
+        });
+    });
+
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .catch(error => {
+            console.error(error);
+        });
+
+</script>
 @endsection

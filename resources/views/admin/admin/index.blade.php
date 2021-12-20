@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="m-t-25">
-                <table id="data-table" class="table table-hover table-responsive-lg overflow-auto">
+                <table id="data-table" class="table table-hover table-responsive-lg text-center overflow-auto">
                     <thead>
                         <tr>
                             <th>No</th>

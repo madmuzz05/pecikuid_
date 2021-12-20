@@ -57,10 +57,11 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('/produk')->group(function (){
     Route::get('/', [ProdukController::class, 'index'])->name('produk.index')->middleware('is_admin');
+    Route::get('/getProduk', [ProdukController::class, 'getProduk'])->name('produk.getProduk')->middleware('is_admin');
     Route::get('/create', [ProdukController::class, 'create'])->name('produk.create')->middleware('is_admin');
     Route::post('/store', [ProdukController::class, 'store'])->name('produk.store')->middleware('is_admin');
     Route::get('/edit/{id}', [ProdukController::class, 'edit'])->name('produk.edit')->middleware('is_admin');
-    Route::get('/update', [ProdukController::class, 'update'])->name('produk.update')->middleware('is_admin');
+    Route::post('/update', [ProdukController::class, 'update'])->name('produk.update')->middleware('is_admin');
     Route::get('/detail/{id}', [ProdukController::class, 'show'])->name('produk.detail')->middleware('is_admin');
-    Route::get('/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.delete')->middleware('is_admin');
+    Route::post('/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.delete')->middleware('is_admin');
 });

@@ -10,6 +10,8 @@ class Produk extends Model
     use HasFactory, Notifiable;
 
     protected $table = 'produk';
+    protected $primaryKey = 'id_produk';
+
 
     protected $fillable = [
         'foto',
@@ -20,6 +22,7 @@ class Produk extends Model
         'tinggi',
         'unit',
         'harga',
+        'deskripsi',
         'brand_id',
     ];
 }
