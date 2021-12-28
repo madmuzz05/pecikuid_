@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admin.admin')
 @section('title', 'Data Produk')
 @section('content')
 <!-- Content Wrapper START -->
@@ -21,8 +21,8 @@
                         class="btn btn-secondary btn-sm btn-tone m-r-5">Tambah Data</button>
                 </div>
             </div>
-            <div class="m-t-25">
-                <table id="data-table2" class="table table-hover table-responsive-lg overflow-auto">
+            <div class="m-t-25 table-responsive-lg">
+                <table id="data-table2" class="table table-hover text-center overflow-auto">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -259,6 +259,7 @@
         var t = $('#data-table2').dataTable({
             processing: true,
             serverSide: true,
+            responsive: true,
             ajax: "{{route('produk.index')}}",
             columns: [
                 // {

@@ -1,3 +1,9 @@
+  <!-- Core Vendors JS -->
+  <script src="{{asset('assets/js/vendors.min.js')}}"></script>
+
+<!-- page js -->
+<script src="{{asset('assets/vendors/chartjs/Chart.min.js')}}"></script>
+<script src="{{asset('assets/js/pages/dashboard-crm.js')}}"></script>
 <script src="{{asset('assets/vendors/select2/select2.min.js')}}"></script>
 <script src="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
 <script src="{{asset('assets/vendors/datatables/jquery.dataTables.min.js')}}"></script>

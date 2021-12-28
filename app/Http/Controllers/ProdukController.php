@@ -123,11 +123,15 @@ class ProdukController extends Controller
      * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function show(Produk $produk)
+    public function show(Request $request ,$id)
     {
         $sql='SELECT brand.*, produk.* FROM produk LEFT JOIN brand ON produk.brand_id = brand.id_brand WHERE produk.brand_id = ? AND produk.id_produk = ?';
         $data = DB::select($sql, [Auth::user()->brand_id, $id]);
-        dd($data);
+        // dd($data);
+        if ($request->ajax()) {
+            return response()->json(['data' => $data]);
+        }
+        return view('admin.produk.detail', compact('data'));
     }
 
     /**

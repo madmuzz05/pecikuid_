@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admin.admin')
 @section('title', 'Data Produk')
 @section('content')
 @foreach($data as $d)

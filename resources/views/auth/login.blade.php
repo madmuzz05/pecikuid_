@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.png') }}">
 
     <!-- page css -->
-    @include('layouts.css')
+    @include('layouts.admin.css')
 
     <!-- Core css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet">
@@ -100,7 +100,7 @@
     <script src="assets/js/vendors.min.js"></script>
 
     <!-- page js -->
-    @include('layouts.js')
+    @include('layouts.admin.js')
 
     <!-- Core JS -->
     <script src="assets/js/app.min.js"></script>

@@ -19,6 +19,6 @@ class IsAdmin
         if (auth()->check() && auth()->user()->is_admin === 'owner' || auth()->user()->is_admin === 'admin') {
             return $next($request);
         }
-        return redirect('home')->with('error', "Don't have admin access");
+        return redirect('user.home')->with('error', "Don't have admin access");
     }
 }

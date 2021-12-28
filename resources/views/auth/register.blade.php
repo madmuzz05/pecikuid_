@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.png') }}">
 
     <!-- page css -->
-    @include('layouts.css')
+    @include('layouts.admin.css')
 
     <!-- Core css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet">
@@ -87,8 +87,9 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="font-weight-semibold" for="Kelamin">Jenis Kelamin:</label>
-                                            <select class="select2  @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" id="Kelamin"
-                                                autocomplete="jenis_kelamin" autofocus required>
+                                            <select class="select2  @error('jenis_kelamin') is-invalid @enderror"
+                                                name="jenis_kelamin" id="Kelamin" autocomplete="jenis_kelamin" autofocus
+                                                required>
                                                 <option value=""></option>
                                                 <option value="laki-laki">Laki-Laki</option>
                                                 <option value="perempuan">Perempuan</option>
@@ -163,7 +164,7 @@
     <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
 
     <!-- page js -->
-    @include('layouts.js')
+    @include('layouts.admin.js')
     <!-- Core JS -->
     <script src="{{ asset('assets/js/app.min.js') }}"></script>
 

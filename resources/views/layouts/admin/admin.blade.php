@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/images/logo/favicon.png')}}">
 
     <!-- page css -->
-    @include('layouts.css')
+    @include('layouts.admin.css')
 
     <!-- Core css -->
     <link href="{{asset('assets/css/app.min.css')}}" rel="stylesheet">
@@ -302,19 +302,11 @@
             <!-- Quick View END -->
         </div>
     </div>
-
-    
-    <!-- Core Vendors JS -->
-    <script src="{{asset('assets/js/vendors.min.js')}}"></script>
-
-    <!-- page js -->
-    <script src="{{asset('assets/vendors/chartjs/Chart.min.js')}}"></script>
-    <script src="{{asset('assets/js/pages/dashboard-crm.js')}}"></script>
     <!-- <script src="http://code.jquery.com/jquery-3.3.1.min.js"
                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
                crossorigin="anonymous">
 </script> -->
-    @include('layouts.js')
+    @include('layouts.admin.js')
     @yield('js')
     
 

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\HomeUserController;
+use App\Http\Controllers\ProdukUserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProdukController;
@@ -19,8 +21,11 @@ use App\Http\Controllers\ProdukController;
 */
 
 Route::get('/', function () {
-    return view('auth/login');
+    return redirect('index');
 });
+Route::get('/index', [HomeUserController::class, 'index'])->name('user.index');
+Route::get('/product', [ProdukUserController::class, 'index'])->name('product');
+Route::get('/product-detail/{id}', [ProdukUserController::class, 'show'])->name('product_detail');
 
 Auth::routes();
 
@@ -31,7 +36,6 @@ Route::get('logout', function ()
     return Redirect::to('/login');
 })->name('logout');
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/admin/home', [HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
 
 Route::prefix('brand')->group(function () {
