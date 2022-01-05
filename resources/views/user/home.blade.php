@@ -96,7 +96,7 @@
                             </div>
                             <h3>{{$p->nama_produk}}</h3>
                             <p class="product-price"><span>No: {{$p->nomor}} Tinggi: {{$p->tinggi}}</span> Rp {{$p->harga}}</p>
-                            <a href="/product-detail/{{$p->id_produk}}" class="cart-btn">Click Detail</a>
+                            <a href="/product_detail/{{$p->id_produk}}" class="cart-btn">Click Detail</a>
                         </div>
                     </div>
                 @endforeach

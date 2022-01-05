@@ -1,7 +1,6 @@
 @extends('layouts.admin.admin')
 @section('title', 'Data Produk')
 @section('content')
-@foreach($data as $d)
 <!-- Content Wrapper START -->
 @foreach($data as $d)
 <input type="hidden" value="{{$d->id_produk}}" id="id_produk">
@@ -35,6 +34,9 @@
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#product-overview">Overview</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#product-images">Product Images</a>
             </li>
         </ul>
     </div>
@@ -168,12 +170,24 @@
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade" id="product-images">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach($data2 as $d2)
+                            <div class="col-md-3 mr-3">
+                                <img width="85%" src="{{ url('/images/'.$d2->foto) }}" alt="">
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endforeach
 <!-- Content Wrapper END -->
-@endforeach
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -183,7 +197,7 @@
             url: "/getBrand",
             dataType: 'json',
             success: function (response) {
-                // console.log(response.data);
+                console.log(response.data);
                 var bodyData = '';
                 $.each(response.data, function (key, item) {
                     document.getElementById('id_brand').value = item.id_brand;
@@ -197,24 +211,25 @@
     });
 
     var id_produk = document.getElementById('id_produk').value
+    
     $(document).ready(function () {
         $.ajax({
             type: "GET",
-            url: "/produk/detail/"+id_produk,
-            dataType: 'json',
+            url: "/produk/detail/" + id_produk,
             success: function (response) {
-                // console.log(response.data);
+                console.log(response.data);
                 var deskripsi = '';
                 var stok = '';
                 $.each(response.data, function (key, item) {
                     if (item.deskripsi != null) {
-                    deskripsi += item.deskripsi
+                        deskripsi += item.deskripsi
                     }
-                    
                     if (item.unit != 0) {
-                    stok += '<td><span class="badge badge-pill badge-cyan">In Stock</span></td>'
+                        stok +=
+                            '<td><span class="badge badge-pill badge-cyan">In Stock</span></td>'
                     } else {
-                    stok += '<td><span class="badge badge-pill badge-red">Out of Stock</span></td>'
+                        stok +=
+                            '<td><span class="badge badge-pill badge-red">Out of Stock</span></td>'
                     }
                 })
                 $("#deskripsi").append(deskripsi);
@@ -222,12 +237,6 @@
             }
         });
     });
-
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .catch(error => {
-            console.error(error);
-        });
 
     function thisFileUpload() {
         document.getElementById("file").click();

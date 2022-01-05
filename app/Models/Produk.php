@@ -24,5 +24,7 @@ class Produk extends Model
         'harga',
         'deskripsi',
         'brand_id',
+        // 'foto_lain',
+        'jenis_penjualan'
     ];
 }

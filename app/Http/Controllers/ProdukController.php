@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\Models\ProdukImage;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use DB;
@@ -18,21 +19,13 @@ class ProdukController extends Controller
      */
     public function index(Request $request)
     {
-        $sql = 'SELECT brand.*, produk.* FROM produk LEFT JOIN brand ON produk.brand_id = brand.id_brand WHERE produk.brand_id = ?';
+        $sql = 'SELECT brand.*, produk.* FROM produk LEFT JOIN brand ON produk.brand_id = brand.id_brand WHERE produk.brand_id = ? order by produk.id_produk desc';
         // $sql = 'SELECT * FROM brand ';
         $data = DB::select($sql, [Auth::user()->brand_id]);
         // $data = DB::select($sql);
         if ($request->ajax()) {
             $ajax = Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function ($row)
-            {
-                $btn = '<a href="/produk/detail/'.$row->id_produk.'" class="btn btn-sm btn-tone btn-info" data-toggle="tooltip" data-placement="top" title="Detail"><i class="anticon anticon-profile"></i> Detail</a>
-                <a href="/produk/edit/'.$row->id_produk.'"class="btn btn-sm btn-tone btn-success" data-toggle="tooltip" data-placement="top" title="Edit"><i class="anticon anticon-edit"></i> Edit</a>
-                <button type="button" class="btn btn-sm btn-tone btn-danger" data-toggle="modal" data-target="#delete'.$row->id_produk.'"><i data-toggle="tooltip" data-placement="top" title="Hapus" class="anticon anticon-delete"></i> Delete</button>';
-                return $btn;
-            })
-            ->rawColumns(['action'])
             ->make(true);
             return $ajax; 
             // return response()->json(['data' => $data]);
@@ -92,27 +85,52 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('foto');
-        $nama_file = time()."_".$file->getClientOriginalName();
+        // $request->validate([
+        //     'foto' => ['required', 'string', 'max:255'],
+        //     'nama_produk' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
+        //     'jenis_kelamin' => ['required'],
+        //     'alamat' => ['required', 'string', 'max:255'],
+        //     'telepon' => ['required', 'numeric'],
+            
+        // ]);
+        $file1 = $request->file('foto');
+        $nama_file = time()."_".$file1->getClientOriginalName();
             // isi dengan nama folder tempat kemana file diupload
         $tujuan_upload = 'images';
-        $file->move($tujuan_upload,$nama_file);
+        $file1->move($tujuan_upload,$nama_file);
 
 
         $kode = $this->jenisProduk($request->jenis_produk).'-'.sprintf("%03s",$this->generateBarcodeNumber());
         
-        $produk = Produk::create([
-            'foto' => $nama_file,
-            'nama_produk' => $request->nama_produk,
-            'kode_produk' => $kode,
-            'jenis_produk' => $request->jenis_produk,
-            'nomor' => $request->nomor,
-            'tinggi' => $request->tinggi,
-            'unit' => $request->unit,
-            'harga' => $request->harga,
-            'deskripsi' => $request->deskripsi,
-            'brand_id' => $request->brand,
-        ]);
+        $produk = new Produk;
+            $produk->foto = $nama_file;
+            $produk->nama_produk = $request->nama_produk;
+            $produk->kode_produk = $kode;
+            $produk->jenis_produk = $request->jenis_produk;
+            $produk->nomor = $request->nomor;
+            $produk->tinggi = $request->tinggi;
+            $produk->unit = $request->unit;
+            $produk->harga = $request->harga;
+            $produk->deskripsi = $request->deskripsi;
+            $produk->brand_id = $request->brand;
+            $produk->jenis_penjualan = $request->jenis_penjualan;
+            $produk->save();
+            
+        if ($request->hasfile('foto_lain')) 
+        {
+            foreach ($request->file('foto_lain') as $file2) 
+            {
+                $name = time()."_".$file2->getClientOriginalName();
+                $tujuan_upload = 'images';
+                $file2->move($tujuan_upload,$name); 
+                ProdukImage::create([
+                    'foto' => $name,
+                    'produk_id' => $produk->id_produk,
+                ]);
+            }
+        }
+
         // dd($produk);
         return redirect('/produk');
     }
@@ -127,11 +145,17 @@ class ProdukController extends Controller
     {
         $sql='SELECT brand.*, produk.* FROM produk LEFT JOIN brand ON produk.brand_id = brand.id_brand WHERE produk.brand_id = ? AND produk.id_produk = ?';
         $data = DB::select($sql, [Auth::user()->brand_id, $id]);
+
+        $sql2='SELECT product_images.* FROM produk 
+        LEFT JOIN brand ON produk.brand_id = brand.id_brand 
+        LEFT JOIN product_images ON produk.id_produk = product_images.produk_id 
+        WHERE produk.brand_id = ? AND produk.id_produk = ?';
+        $data2 = DB::select($sql2, [Auth::user()->brand_id, $id]);
         // dd($data);
         if ($request->ajax()) {
             return response()->json(['data' => $data]);
         }
-        return view('admin.produk.detail', compact('data'));
+        return view('admin.produk.detail', compact('data','data2'));
     }
 
     /**
@@ -140,11 +164,32 @@ class ProdukController extends Controller
      * @param  \App\Models\Produk  $produk
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request ,$id)
     {
-        $sql='SELECT brand.*, produk.* FROM produk LEFT JOIN brand ON produk.brand_id = brand.id_brand WHERE produk.brand_id = ? AND produk.id_produk = ?';
+        $sql='SELECT brand.*, produk.* FROM produk 
+        LEFT JOIN brand ON produk.brand_id = brand.id_brand 
+        WHERE produk.brand_id = ? AND produk.id_produk = ?';
         $data = DB::select($sql, [Auth::user()->brand_id, $id]);
-        return view('admin.produk.edit', compact('data'));
+
+        $sql2='SELECT product_images.*, produk.id_produk as id_produk FROM produk 
+        LEFT JOIN brand ON produk.brand_id = brand.id_brand
+        LEFT JOIN product_images ON produk.id_produk = product_images.produk_id 
+        WHERE produk.brand_id = ? AND produk.id_produk = ?';
+            $data2 = DB::select($sql2, [Auth::user()->brand_id, $id]);
+        if ($request->ajax()) {
+            if ($data2 != null) {
+                return response()->json([
+                    'data2' => $data2,
+                    'status'=>200,
+            ]);
+            }else {
+                return response()->json([
+                    'status'=>404,
+            ]);
+            }
+        }
+// dd($data2);
+        return view('admin.produk.edit', compact('data','data2'));
     }
 
     /**
@@ -173,6 +218,18 @@ class ProdukController extends Controller
                 'kode_produk' => $kode
             ]);
         }
+        if ($request->hasfile('filenames')) 
+        {
+            foreach ($request->file('filenames') as $file2) 
+            {
+                $name = time()."_".$file->getClientOriginalName();
+                $tujuan_upload = 'images';
+                $file2->move($tujuan_upload,$name); 
+                $produk = ProdukImage::where('id_produk', $request->id)->update([
+                    'foto_lain' => json_encode($data),
+                ]);
+            }
+        }
         
         $produk = Produk::where('id_produk', $request->id)->update([
             'nama_produk' => $request->nama_produk,
@@ -182,6 +239,7 @@ class ProdukController extends Controller
             'unit' => $request->unit,
             'harga' => $request->harga,
             'deskripsi' => $request->deskripsi,
+            'jenis_penjualan' => $request->jenis_penjualan,
             'brand_id' => Auth::user()->brand_id,
         ]);
         // dd($produk);
@@ -196,6 +254,7 @@ class ProdukController extends Controller
      */
     public function destroy($id)
     {
+        ProdukImage::where('produk_id',$id)->delete();
         Produk::destroy($id);
         return redirect('/produk');
     }

@@ -16,6 +16,7 @@
 
     <!-- Core css -->
     <link href="{{asset('assets/css/app.min.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
 
 </head>
 
@@ -302,10 +303,10 @@
             <!-- Quick View END -->
         </div>
     </div>
-    <!-- <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
                crossorigin="anonymous">
-</script> -->
+</script>
     @include('layouts.admin.js')
     @yield('js')
     

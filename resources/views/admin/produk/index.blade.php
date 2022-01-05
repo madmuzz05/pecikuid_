@@ -34,7 +34,7 @@
                             <th>Tinggi</th>
                             <th>Unit</th>
                             <th>Harga</th>
-                            <!-- <th>Deskripsi</th> -->
+                            <th>Jenis Penjualan</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -51,7 +51,7 @@
                             <th>Tinggi</th>
                             <th>Unit</th>
                             <th>Harga</th>
-                            <!-- <th>Deskripsi</th> -->
+                            <th>Jenis Penujualan</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -100,7 +100,7 @@
             <div class="modal-body">
                 <div class="m-t-20 container-fluid">
                     <form method="POST" action="{{ route('produk.store') }}" enctype="multipart/form-data">
-                        @csrf
+                    {{ csrf_field() }}
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="brand">Nama
                                 Brand</label>
@@ -198,10 +198,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="foto">Upload
-                                Foto</label>
+                            <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="foto">Foto Produk</label>
                             <div class="col-md-10">
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <input type="file" class="form-control @error('foto') is-invalid @enderror"
                                         name="foto" id="inputGroupFile02">
                                     <label class="input-group-text" for="inputGroupFile02">Browse</label>
@@ -214,10 +213,37 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="foto_lain">Foto lain  <p class="text-muted">(Opsional)</p></label>
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <input type="file" class="form-control"
+                                        name="foto_lain[]" id="inputGroupFile03" multiple>
+                                    <label class="input-group-text" for="inputGroupFile03">Browse</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-2 col-form-label control-label font-weight-semibold"
                                 for="deskripsi">Deskripsi</label>
                             <div class="col-md-10">
                                 <textarea class="form-control" name="deskripsi" id="editor" rows="30"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label control-label font-weight-semibold" for="jenis_penjualan">Jenis
+                                Penjualan</label>
+                            <div class="col-md-10">
+                                <select class="select2  @error('jenis_penjualan') is-invalid @enderror" name="jenis_penjualan"
+                                    id="jenis_penjualan">
+                                    <option value=""></option>
+                                    <option value="Retail">Retail</option>
+                                    <option value="Grosir">Grosir</option>
+                                </select>
+                                @error('jenis_produk')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                 </div>
@@ -304,11 +330,22 @@
                     className: 'text-center'
                 },
                 {
-                    data: 'action',
-                    name: 'action',
+                    data: 'jenis_penjualan',
+                    name: 'jenis_penjualan',
                     className: 'text-center'
                 },
-            ]
+                {
+                    data: 'id_produk',
+                    name: 'id_produk',
+                    className: 'text-center'
+                },
+            ],
+            columnDefs: [{
+                "targets": -1,
+                "render": function (data, type, row, meta) {
+                    return '<a href="/produk/detail/'+row.id_produk+'" class="btn btn-xs btn-tone btn-info mr-2" data-toggle="tooltip" data-placement="top" title="Detail"><i class="anticon anticon-profile"></i> Detail</a> <a href="/produk/edit/'+row.id_produk+'"class="btn btn-xs btn-tone btn-success mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="anticon anticon-edit"></i> Edit</a> <button type="button" class="btn btn-xs btn-tone btn-danger mr-2" data-toggle="modal" data-target="#delete'+row.id_produk+'"><i data-toggle="tooltip" data-placement="top" title="Hapus" class="anticon anticon-delete"></i> Delete</button>'
+                }
+            }]
         });
     });
 

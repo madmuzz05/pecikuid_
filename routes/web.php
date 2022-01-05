@@ -8,6 +8,7 @@ use App\Http\Controllers\ProdukUserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\ProdukImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,11 @@ Route::get('/', function () {
     return redirect('index');
 });
 Route::get('/index', [HomeUserController::class, 'index'])->name('user.index');
-Route::get('/product', [ProdukUserController::class, 'index'])->name('product');
-Route::get('/product-detail/{id}', [ProdukUserController::class, 'show'])->name('product_detail');
+Route::prefix('product')->group(function (){
+    Route::get('/retail', [ProdukUserController::class, 'indexRetail'])->name('product.retail');
+    Route::get('/grosir', [ProdukUserController::class, 'indexGrosir'])->name('product.grosir');
+});
+Route::get('/product_detail/{id}', [ProdukUserController::class, 'show'])->name('product_detail');
 
 Auth::routes();
 
@@ -68,4 +72,11 @@ Route::prefix('/produk')->group(function (){
     Route::post('/update', [ProdukController::class, 'update'])->name('produk.update')->middleware('is_admin');
     Route::get('/detail/{id}', [ProdukController::class, 'show'])->name('produk.detail')->middleware('is_admin');
     Route::post('/delete/{id}', [ProdukController::class, 'destroy'])->name('produk.delete')->middleware('is_admin');
+});
+Route::prefix('/produk_image')->group(function (){
+    Route::post('/store', [ProdukImageController::class, 'store'])->name('produk_image.store')->middleware('is_admin');
+    Route::delete('/delete/{id}', [ProdukImageController::class, 'destroy'])->name('produk_image.delete')->middleware('is_admin');
+});
+Route::get('/admin/produk/foto', function () {
+    return view('/admin/produk/foto');
 });
