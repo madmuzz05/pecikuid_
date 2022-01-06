@@ -68,14 +68,31 @@ class ProdukUserController extends Controller
 
         $sql2 = 'SELECT product_images.* FROM product_images
         LEFT JOIN produk ON product_images.produk_id = produk.id_produk
-        WHERE produk.id_produk = ?';
+        WHERE produk.id_produk = ? order BY produk.id_produk asc';
         $data2 = DB::select($sql2, [$id]);
 
         if ($request->ajax()) {
-            return response()->json(['data2' => $data2]);
+            return response()->json([
+                'data2' => $data2,
+                'data' => $data
+        ]);
         }
         // dd($data2);
         return view('user.produk.detail', compact('data'));
+    }
+    
+    public function moreProduct(Request $request, $jenis_produk)
+    {
+        $sql = 'SELECT produk.*, brand.* FROM produk
+        LEFT JOIN brand ON produk.brand_id = brand.id_brand
+        WHERE produk.jenis_produk = ? order BY produk.id_produk asc limit 3';
+        $data = DB::select($sql, [$jenis_produk]);
+        // dd($data);
+        if ($request->ajax()) {
+            return response()->json([
+                'data' => $data
+            ]);
+        }
     }
 
     /**

@@ -12,7 +12,7 @@
                             <h1>Songkok Nasional</h1>
 							<p class="subtitle-2">Tersedia dalam beberapa model</p>
 							<div class="hero-btns">
-								<a href="{{route('product')}}" class="bordered-btn">Order Now</a>
+								<a href="{{route('product.retail')}}" class="bordered-btn">Order Now</a>
 							</div>
 						</div>
 					</div>
@@ -92,7 +92,7 @@
                     <div class="col-lg-3 col-md-5 offset-md-3 offset-lg-0 text-center">
                         <div class="single-product-item">
                             <div class="product-image">
-                                <a href="single-product.html"><img src="{{ url('/images/'.$p->foto) }}" alt=""></a>
+                                <a href="/product_detail/{{$p->id_produk}}"><img src="{{ url('/images/'.$p->foto) }}" alt=""></a>
                             </div>
                             <h3>{{$p->nama_produk}}</h3>
                             <p class="product-price"><span>No: {{$p->nomor}} Tinggi: {{$p->tinggi}}</span> Rp {{$p->harga}}</p>

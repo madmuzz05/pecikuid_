@@ -48,15 +48,15 @@
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li class="current-list-item"><a href="{{route('user.index')}}">Home</a></li>
-                                <li><a href="about.html">About</a></li>
-                                <li><a href="#">Shop</a>
+                                <li class="{{ (request()->is('index')) ? 'current-list-item' : '' }}"><a href="{{route('user.index')}}">Home</a></li>
+                                <li class="{{ (request()->is('about')) ? 'current-list-item' : '' }}"><a href="about.html">About</a></li>
+                                <li class="{{ (request()->is('product*')) ? 'current-list-item' : '' }}"><a href="#">Shop</a>
                                     <ul class="sub-menu">
                                         <li><a href="{{route('product.retail')}}">Retail</a></li>
                                         <li><a href="{{route('product.grosir')}}">Grosir</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="contact.html">Contact</a></li>
+                                <li class="{{ (request()->is('contact')) ? 'current-list-item' : '' }}"><a href="contact.html">Contact</a></li>
                                 <!-- <li><a href="shop.html">Shop</a>
 									<ul class="sub-menu">
 										<li><a href="shop.html">Shop</a></li>

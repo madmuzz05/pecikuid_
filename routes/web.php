@@ -29,6 +29,7 @@ Route::prefix('product')->group(function (){
     Route::get('/retail', [ProdukUserController::class, 'indexRetail'])->name('product.retail');
     Route::get('/grosir', [ProdukUserController::class, 'indexGrosir'])->name('product.grosir');
 });
+Route::get('/more_product/{jenis_produk}', [ProdukUserController::class, 'moreProduct'])->name('more_product');
 Route::get('/product_detail/{id}', [ProdukUserController::class, 'show'])->name('product_detail');
 
 Auth::routes();
