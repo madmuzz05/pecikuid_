@@ -210,7 +210,7 @@
             success: function (response) {
                 var bodyData = '';
                 $.each(response.data, function (key, item) {
-                    console.log(item.nama_brand);
+                    // console.log(item.nama_brand);
                     document.getElementById('productBrand').value = item.nama_brand;
                     bodyData += '<option value="' + item.id_brand + '">' + item
                         .nama_brand +
@@ -231,7 +231,7 @@
                 url: "/produk/edit/" + id_produk,
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response.data2);
+                    // console.log(response.data2);
                     $('#img').html("");
                     var img = '';
                     $.each(response.data2, function (key, item) {
@@ -276,8 +276,6 @@
             var idProduk = document.getElementById('id_produk').value
 
             
-
-
             $.ajax({
                 async:true,
                 type: "POST",
@@ -287,7 +285,7 @@
                 dataType: 'JSON',
                 processData: false,
                 success: function (res) {
-                    console.log(res);
+                    // console.log(res);
                     $('#add').modal('hide')
                     active()
                     location.reload();
@@ -313,7 +311,7 @@
                 success: function (response) {
                     if (response.status == 200) {
                         getImg()
-                        console.log("Y");
+                        // console.log("Y");
                     }
                 }
             });

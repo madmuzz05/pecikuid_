@@ -1,5 +1,12 @@
 @extends('layouts.user.user')
 @section('title', 'Home')
+@section('loader')
+<div class="loader">
+        <div class="loader-inner">
+            <div class="circle"></div>
+        </div>
+    </div>
+@endsection
 @section('content')
 	<!-- hero area -->
 	<div class="hero-area hero-bg">

@@ -9,6 +9,9 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProdukImageController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\RajaOngkirController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,13 +27,38 @@ use App\Http\Controllers\ProdukImageController;
 Route::get('/', function () {
     return redirect('index');
 });
+
 Route::get('/index', [HomeUserController::class, 'index'])->name('user.index');
-Route::prefix('product')->group(function (){
-    Route::get('/retail', [ProdukUserController::class, 'indexRetail'])->name('product.retail');
-    Route::get('/grosir', [ProdukUserController::class, 'indexGrosir'])->name('product.grosir');
-});
 Route::get('/more_product/{jenis_produk}', [ProdukUserController::class, 'moreProduct'])->name('more_product');
 Route::get('/product_detail/{id}', [ProdukUserController::class, 'show'])->name('product_detail');
+
+Route::prefix('product')->group(function (){
+Route::get('/retail', [ProdukUserController::class, 'indexRetail'])->name('product.retail');
+Route::get('/grosir', [ProdukUserController::class, 'indexGrosir'])->name('product.grosir');
+});
+
+Route::prefix('ongkir')->group(function (){
+    Route::get('/get_provinsi', [RajaOngkirController::class, 'getProvinsi'])->name('ongkir.get_provinsi');
+    Route::get('/get_kota', [RajaOngkirController::class, 'getKota'])->name('ongkir.get_kota');
+    Route::post('/', [RajaOngkirController::class, 'cekOngkir'])->name('ongkir.index');
+    
+});
+
+Route::prefix('cart')->group(function (){
+Route::get('/', [CartController::class, 'index'])->name('cart.index');
+// Route::get('/clear', [CartController::class, 'clear_cart'])->name('cart.clear');
+Route::delete('/delete', [CartController::class, 'destroy'])->name('cart.delete');
+Route::patch('/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('/load', [CartController::class, 'show'])->name('cart.load');
+Route::post('/add/{id}', [CartController::class, 'create'])->name('cart.create');
+});
+
+Route::prefix('pembayaran')->group(function (){
+Route::get('/checkout', [PembayaranController::class, 'checkout'])->name('pembayaran.checkout');
+Route::post('/store', [PembayaranController::class, 'store'])->name('pembayaran.store');
+Route::get('/cek_pembayaran', [PembayaranController::class, 'edit'])->name('pembayaran.cek_pembayaran');
+Route::post('/konfirmasi', [PembayaranController::class, 'update'])->name('pembayaran.konfirmasi');
+});
 
 Auth::routes();
 

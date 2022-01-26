@@ -443,6 +443,12 @@ p:last-child {
     background-color: #162133;
 }
 
+.btn-cart {
+    font-family: 'Poppins', sans-serif;
+    display: inline-block;
+    color: #64C5B1;
+}
+
 a.boxed-btn {
     font-family: 'Poppins', sans-serif;
     display: inline-block;
@@ -613,6 +619,27 @@ nav.main-menu ul ul.sub-menu {
     padding: 15px 15px;
     margin: 0;
     left: 0;
+    top: 50px;
+    border-radius: 3px;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-box-shadow: 0 0 20px #555555;
+    box-shadow: 0 0 20px #555555;
+}
+
+nav.main-menu ul ul.sub-menu-2 {
+    position: absolute;
+    background-color: #fff;
+    width: 410px;
+    height: 300px;
+    padding: 15px 30px;
+    margin: 0;
+    overflow-y: scroll;
+    /* overflow-x: visible; */
+    right: 0;
     top: 50px;
     border-radius: 3px;
     -webkit-transition: 0.3s;
@@ -1277,6 +1304,20 @@ div.owl-controls div.owl-nav div:hover {
 .product-image img:hover {
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+.cart-detail {
+    padding: 10px 50px;
+}
+
+.cart-detail .price {
+    font-size: 12px;
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+.cart-detail .count {
+    color: #C2C2DC;
 }
 
 a.cart-btn {
